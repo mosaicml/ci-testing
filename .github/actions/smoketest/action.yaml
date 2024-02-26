@@ -1,0 +1,22 @@
+name: Smoketest
+inputs:
+  python_version:
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+  - uses: actions/setup-python@v4
+    with:
+      python-version: ${{ inputs.python_version }}
+  - name: Setup
+    shell: bash
+    run: |
+      set -ex
+      python -m pip install --upgrade 'pip<23' wheel
+      python -m pip install --upgrade .
+      python -m pip install pytest==7.2.1 pytest_codeblocks==0.16.1
+  - name: Run checks
+    shell: bash
+    run: |
+      pytest tests/test_smoketest.py

@@ -1,0 +1,29 @@
+name: PyTest Coverage
+inputs:
+  download-path:
+    required: true
+    type: string
+runs:
+  using: composite
+  steps:
+  - name: Setup
+    shell: bash
+    run: |
+      set -ex
+      python -m pip install --upgrade 'pip<23' wheel
+      pip install coverage[toml]==6.5.0
+  - name: Download artifacts
+    uses: actions/download-artifact@v3
+    with:
+      path: ${{ inputs.download-path }}
+  - name: Generate coverage report
+    shell: bash
+    run: |
+      set -ex
+
+      # Flatten the coverage files
+      # yamllint disable-line rule:line-length
+      ls ${{ inputs.download-path }} | while read x; do mv ${{ inputs.download-path }}/$x/.coverage .coverage.$x; done
+
+      python -m coverage combine
+      python -m coverage report
