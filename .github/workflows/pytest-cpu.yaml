@@ -3,12 +3,15 @@ on:
   workflow_call:
     inputs:
       composer_package_name:
-        required: true
+        required: false
         type: string
       container:
         required: true
         type: string
       name:
+        required: true
+        type: string
+      pip_deps:
         required: true
         type: string
       pytest-command:
@@ -17,14 +20,14 @@ on:
       pytest-markers:
         required: true
         type: string
-      pytest-s3-bucket:
-        required: false
-        type: string
       pytest-wandb-entity:
         required: false
         type: string
       pytest-wandb-project:
         required: false
+        type: string
+      safe_directory:
+        required: true
         type: string
     secrets:
       wandb-api-key:
@@ -63,7 +66,7 @@ jobs:
         export PATH=/composer-python:$PATH
         export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
         python -m pip install --upgrade 'pip<23' wheel
-        python -m pip install --upgrade .[all]
+        python -m pip install --upgrade .${{ inputs.pip_deps }}
     - name: Run Tests
       id: tests
       run: |
@@ -82,11 +85,10 @@ jobs:
         export AZURE_ACCOUNT_NAME='${{ secrets.azure-account-name }}'
         export AZURE_ACCOUNT_ACCESS_KEY='${{ secrets.azure-account-access-key }}'
         export S3_BUCKET='${{ inputs.pytest-s3-bucket }}'
-        export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest-markers }}' --s3_bucket '$S3_BUCKET' \
-          -o tmp_path_retention_policy=none"
+        export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest-markers }}' -o tmp_path_retention_policy=none"
 
         # Necessary to run git diff for doctests
-        git config --global --add safe.directory /__w/composer/composer
+        git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
         make test PYTEST='${{ inputs.pytest-command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
         make test-dist PYTEST='${{ inputs.pytest-command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
