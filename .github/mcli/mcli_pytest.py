@@ -19,6 +19,7 @@ if __name__ == '__main__':
     parser.add_argument('--git_branch', type=str, help='Git branch to check out')
     parser.add_argument('--git_commit', type=str, help='Git commit to check out. Overrides git_branch if specified')
     parser.add_argument('--git_repo', type=str, help='Git repo to check out')
+    parser.add_argument('--ssh_clone', type=str, help='Whether to use SSH to clone the repo')
     parser.add_argument('--pip_deps', type=str, help='Dependency group to install')
     parser.add_argument('--pip_package_name', type=str, default='', help='Name of pip package to install before running tests')
     parser.add_argument('--pr_number',
@@ -33,7 +34,7 @@ if __name__ == '__main__':
     git_integration = {
         'integration_type': 'git_repo',
         'git_repo': args.git_repo,
-        'ssh_clone': 'False',
+        'ssh_clone': args.ssh_clone or 'False',
     }
     if args.git_branch is not None and args.git_commit is None:
         name += f'-branch-{args.git_branch}'

@@ -2,19 +2,12 @@ name: Pytest GPU
 on:
   workflow_call:
     inputs:
-      composer_package_name:
-        required: false
-        type: string
       container:
         required: true
         type: string
       git_repo:
         required: true
         type: string
-      mcloud-timeout:
-        required: false
-        type: number
-        default: 2700
       name:
         required: true
         type: string
@@ -31,6 +24,17 @@ on:
         required: false
         type: string
         default: 3.9
+      mcloud-timeout:
+        required: false
+        type: number
+        default: 2700
+      composer_package_name:
+        required: false
+        type: string
+      ssh-clone:
+        required: false
+        type: boolean
+        default: false
     secrets:
       mcloud-api-key:
         required: true
@@ -99,4 +103,5 @@ jobs:
           --pip_package_name '${{ inputs.composer_package_name }}' \
           --pytest_markers '${{ inputs.pytest-markers }}' \
           --pytest_command '${{ inputs.pytest-command }}' \
-          --timeout ${{ inputs.mcloud-timeout }} ${REF_ARGS}
+          --timeout ${{ inputs.mcloud-timeout }} \
+          --ssh_clone ${{ inputs.ssh-clone }} ${REF_ARGS}
