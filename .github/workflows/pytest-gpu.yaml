@@ -31,7 +31,7 @@ on:
       composer_package_name:
         required: false
         type: string
-      ssh-clone:
+      git-ssh-clone:
         required: false
         type: boolean
         default: false
@@ -104,4 +104,4 @@ jobs:
           --pytest_markers '${{ inputs.pytest-markers }}' \
           --pytest_command '${{ inputs.pytest-command }}' \
           --timeout ${{ inputs.mcloud-timeout }} \
-          --ssh_clone ${{ inputs.ssh-clone }} ${REF_ARGS}
+          --git_ssh_clone ${{ inputs.git-ssh-clone }} ${REF_ARGS}
