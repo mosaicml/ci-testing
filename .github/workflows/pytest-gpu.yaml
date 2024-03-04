@@ -104,4 +104,5 @@ jobs:
           --pytest_markers '${{ inputs.pytest-markers }}' \
           --pytest_command '${{ inputs.pytest-command }}' \
           --timeout ${{ inputs.mcloud-timeout }} \
-          --git_ssh_clone ${{ inputs.git-ssh-clone }} ${REF_ARGS}
+          --git_ssh_clone ${{ inputs.git-ssh-clone }} \
+          ${REF_ARGS}
