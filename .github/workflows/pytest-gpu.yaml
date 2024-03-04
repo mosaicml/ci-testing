@@ -57,6 +57,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: "mosaicml/ci-testing"
+        ref: f8b30cf4b415b5dd78084007f00effb23adbc183
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
