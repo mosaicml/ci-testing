@@ -25,5 +25,9 @@ runs:
       # yamllint disable-line rule:line-length
       ls ${{ inputs.download-path }} | while read x; do mv ${{ inputs.download-path }}/$x/.coverage .coverage.$x; done
 
-      python -m coverage combine
-      python -m coverage report
+      if compgen -G ".coverage*" > /dev/null; then
+        python -m coverage combine
+        python -m coverage report
+      else
+        echo "No coverage data found to combine."
+      fi
