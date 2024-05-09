@@ -5,6 +5,10 @@ on:
       container:
         required: true
         type: string
+      gha-timeout:
+        required: false
+        type: number
+        default: 60
       git_repo:
         required: true
         type: string
@@ -48,7 +52,7 @@ on:
         required: false
 jobs:
   pytest-gpu:
-    timeout-minutes: 60  # ${{ inputs.gha-timeout }} for some reason not able to turn this into an input
+    timeout-minutes: ${{ inputs.gha-timeout }}
     runs-on: ubuntu-latest
     env:
       MOSAICML_API_KEY: ${{ secrets.mcloud-api-key }}
