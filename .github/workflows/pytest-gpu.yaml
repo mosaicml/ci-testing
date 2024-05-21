@@ -39,6 +39,9 @@ on:
         required: false
         type: boolean
         default: false
+      gpu_configurations:
+        required: true
+        type: string
     secrets:
       mcloud-api-key:
         required: true
@@ -56,16 +59,8 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        gpu_num: [1, 2, 4]  # Define the GPU configurations to test
-        job_name: ['pytest-gpu-1', 'pytest-gpu-2', 'pytest-gpu-4']
-      include:
-        - gpu_num: 1
-          job_name: pytest-gpu-1
-        - gpu_num: 2
-          job_name: pytest-gpu-2
-        - gpu_num: 4
-          job_name: pytest-gpu-4
-    name: ${{ matrix.job_name }}
+        gpu_num: [${{ fromJSON(inputs.gpu_configurations) }}]
+    name: Pytest GPU ${{ matrix.gpu_num }}
     env:
       MOSAICML_API_KEY: ${{ secrets.mcloud-api-key }}
     steps:

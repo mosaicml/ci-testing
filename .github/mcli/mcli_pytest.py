@@ -67,11 +67,19 @@ if __name__ == '__main__':
     pip install --upgrade --user .{args.pip_deps}
 
     export COMMON_ARGS="-v --durations=20 -m '{args.pytest_markers}' {clear_tmp_path_flag}"
+    '''
 
-    make test PYTEST='{args.pytest_command}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
+    if args.gpu_num == 1:
+        command += f'''
+        make test PYTEST='{args.pytest_command}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
+        '''
+    else:
+        world_size = args.gpu_num
+        command += f'''
+        make test-dist PYTEST='{args.pytest_command}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE={world_size}
+        '''
 
-    make test-dist PYTEST='{args.pytest_command}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
-
+    command += '''
     python -m coverage combine
 
     python -m coverage report
