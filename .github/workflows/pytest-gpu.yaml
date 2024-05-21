@@ -54,6 +54,18 @@ jobs:
   pytest-gpu:
     timeout-minutes: ${{ inputs.gha-timeout }}
     runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        gpu_num: [1, 2, 4]  # Define the GPU configurations to test
+        job_name: ['pytest-gpu-1', 'pytest-gpu-2', 'pytest-gpu-4']
+      include:
+        - gpu_num: 1
+          job_name: pytest-gpu-1
+        - gpu_num: 2
+          job_name: pytest-gpu-2
+        - gpu_num: 4
+          job_name: pytest-gpu-4
+    name: ${{ matrix.job_name }}
     env:
       MOSAICML_API_KEY: ${{ secrets.mcloud-api-key }}
     steps:
@@ -108,5 +120,6 @@ jobs:
           --pytest_markers '${{ inputs.pytest-markers }}' \
           --pytest_command '${{ inputs.pytest-command }}' \
           --timeout ${{ inputs.mcloud-timeout }} \
+          --gpu_num ${{ matrix.gpu_num }} \
           --git_ssh_clone ${{ inputs.git-ssh-clone }} \
           ${REF_ARGS}

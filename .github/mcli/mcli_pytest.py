@@ -14,7 +14,7 @@ if __name__ == '__main__':
     parser.add_argument('--name', type=str, default='mcli-pytest', help='Base name of run')
     parser.add_argument('--cluster', type=str, default='r1z4', help='Cluster to use')
     parser.add_argument('--gpu_type', type=str, default='a100_40gb', help='Type of GPU to use')
-    parser.add_argument('--gpu_num', type=int, default=2, help='Number of the GPU to use')
+    parser.add_argument('--gpu_num', type=int, default=2, help='Number of GPUs to use')
     parser.add_argument('--image', type=str, default='mosaicml/pytorch:latest', help='Docker image to use')
     parser.add_argument('--git_branch', type=str, help='Git branch to check out')
     parser.add_argument('--git_commit', type=str, help='Git commit to check out. Overrides git_branch if specified')
@@ -22,9 +22,7 @@ if __name__ == '__main__':
     parser.add_argument('--git_ssh_clone', type=bool, default=False, help='Whether to use SSH to clone the repo')
     parser.add_argument('--pip_deps', type=str, help='Dependency group to install')
     parser.add_argument('--pip_package_name', type=str, default='', help='Name of pip package to install before running tests')
-    parser.add_argument('--pr_number',
-                        type=int,
-                        help='PR number to check out. Overrides git_branch/git_commit if specified')
+    parser.add_argument('--pr_number', type=int, help='PR number to check out. Overrides git_branch/git_commit if specified')
     parser.add_argument('--pytest_markers', type=str, help='Markers to pass to pytest')
     parser.add_argument('--pytest_command', type=str, help='Command to run pytest')
     parser.add_argument('--timeout', type=int, default=2700, help='Timeout for run (in seconds)')
