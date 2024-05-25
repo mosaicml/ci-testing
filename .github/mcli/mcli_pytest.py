@@ -115,6 +115,7 @@ if __name__ == '__main__':
     run = wait_for_run_status(run, status='running')
     start_time = time.time()
     print('[GHA] Run started. Following logs...')
+    print(f'---- DEBUGGING {args.gpu_type}, {type(args.gpu_type)}')
 
     # Print logs
     for line in follow_run_logs(run):
