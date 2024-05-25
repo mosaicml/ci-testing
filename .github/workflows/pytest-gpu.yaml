@@ -60,6 +60,10 @@ jobs:
     env:
       MOSAICML_API_KEY: ${{ secrets.mcloud-api-key }}
     steps:
+    - name: Print Git Info
+      run: |
+        echo "Branch: ${{ github.ref }}"
+        echo "SHA: ${{ github.sha }}"
     - name: Checkout Repo
       uses: actions/checkout@v3
       with:

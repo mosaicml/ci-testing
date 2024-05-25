@@ -109,7 +109,6 @@ if __name__ == '__main__':
 
     # Create run
     run = create_run(config)
-    print(f'---- DEBUG GPU COUNT is {args.gpu_num} of type {type(args.gpu_num)}')
     print(f'[GHA] Run created: {run.name}')
 
     # Wait until run starts before fetching logs
