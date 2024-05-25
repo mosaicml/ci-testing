@@ -62,8 +62,6 @@ if __name__ == '__main__':
 
     clear_tmp_path_flag = '-o tmp_path_retention_policy=none'
     command += f'''
-    echo "---- DEBUG GPU COUNT is {args.gpu_num} of type {type(args.gpu_num)}"
-
     export COMPOSER_PACKAGE_NAME='{args.pip_package_name}'
 
     pip install --upgrade --user .{args.pip_deps}
@@ -111,6 +109,7 @@ if __name__ == '__main__':
 
     # Create run
     run = create_run(config)
+    print(f'---- DEBUG GPU COUNT is {args.gpu_num} of type {type(args.gpu_num)}')
     print(f'[GHA] Run created: {run.name}')
 
     # Wait until run starts before fetching logs
