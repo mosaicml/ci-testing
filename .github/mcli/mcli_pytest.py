@@ -109,13 +109,13 @@ if __name__ == '__main__':
 
     # Create run
     run = create_run(config)
+    print(f'[GHA] ---- DEBUGGING {args.gpu_type}, {type(args.gpu_type)}')
     print(f'[GHA] Run created: {run.name}')
 
     # Wait until run starts before fetching logs
     run = wait_for_run_status(run, status='running')
     start_time = time.time()
     print('[GHA] Run started. Following logs...')
-    print(f'---- DEBUGGING {args.gpu_type}, {type(args.gpu_type)}')
 
     # Print logs
     for line in follow_run_logs(run):
