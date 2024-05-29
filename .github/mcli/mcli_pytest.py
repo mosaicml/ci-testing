@@ -62,6 +62,7 @@ if __name__ == '__main__':
 
     clear_tmp_path_flag = '-o tmp_path_retention_policy=none'
     command += f'''
+    
     export COMPOSER_PACKAGE_NAME='{args.pip_package_name}'
 
     pip install --upgrade --user .{args.pip_deps}
