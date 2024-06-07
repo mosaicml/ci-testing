@@ -4,7 +4,6 @@
 """Run pytest using MCLI."""
 
 import argparse
-import os
 import time
 
 from mcli import RunConfig, RunStatus, create_run, follow_run_logs, wait_for_run_status
