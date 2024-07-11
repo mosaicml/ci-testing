@@ -67,9 +67,11 @@ jobs:
       uses: actions/checkout@v3
     - name: Add SSH
       if: ${{ inputs.pip_clone_key_provided }} == 'true'
-      uses: webfactory/ssh-agent@v0.5.3
-      with:
-        ssh-private-key: ${{ secrets.pip-clone-key }}
+      run: |
+        mkdir -p ~/.ssh
+        echo ${{ secrets.pip-clone-key }} > ~/.ssh/pip-clone-key
+        chmod 600 ~/.ssh/pip-clone-key
+        ssh-keyscan github.com >> ~/.ssh/known_hosts
     - name: Setup
       run: |
         set -ex
