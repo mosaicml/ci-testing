@@ -69,7 +69,7 @@ jobs:
       if: ${{ inputs.pip_clone_key_provided }} == 'true'
       run: |
         mkdir -p ~/.ssh
-        echo ${{ secrets.pip-clone-key }} > ~/.ssh/pip-clone-key
+        echo '${{ secrets.pip-clone-key }}' > ~/.ssh/pip-clone-key
         chmod 600 ~/.ssh/pip-clone-key
         ssh-keyscan github.com >> ~/.ssh/known_hosts
     - name: Setup
