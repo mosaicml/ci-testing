@@ -56,7 +56,7 @@ on:
 jobs:
   pytest-gpu:
     timeout-minutes: ${{ inputs.gha-timeout }}
-    runs-on: ubuntu-latest
+    runs-on: linux-ubuntu-latest
     env:
       MOSAICML_API_KEY: ${{ secrets.mcloud-api-key }}
     steps:
