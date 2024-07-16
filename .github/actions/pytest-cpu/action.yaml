@@ -61,7 +61,7 @@ runs:
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
       python -m pip install --upgrade 'pip<23' wheel
-      python -m pip install --upgrade .${{ inputs.pip_deps }}
+      python -m pip install --upgrade .${{ inputs.pip-deps }}
   - name: Run Tests
     id: tests
     shell: bash
