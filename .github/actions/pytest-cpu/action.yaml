@@ -1,144 +1,94 @@
-name: Pytest GPU
-description: A composite action to run Pytest in a GPU environment
+name: Pytest CPU
 inputs:
+  composer_package_name:
+    required: false
+    type: string
   container:
     required: true
     type: string
-    description: 'Docker container to use'
-  gha-timeout:
-    required: false
-    type: number
-    default: 60
-    description: 'GitHub Action timeout'
-  git-repo:
-    required: true
-    type: string
-    description: 'Git repository to clone'
   name:
     required: true
     type: string
-    description: 'Job name'
-  pip-deps:
+  pip_deps:
     required: true
     type: string
-    description: 'Python dependencies to install'
-  pytest-command:
+  pytest_command:
     required: true
     type: string
-    description: 'Pytest command to run'
-  pytest-markers:
+  pytest_markers:
     required: true
     type: string
-    description: 'Markers for pytest'
-  python-version:
+  pytest_wandb_entity:
     required: false
     type: string
-    default: '3.9'
-    description: 'Python version to use'
-  mcloud-timeout:
-    required: false
-    type: number
-    default: 2700
-    description: 'MosaicML cloud timeout'
-  composer-package-name:
+  pytest_wandb_project:
     required: false
     type: string
-    description: 'The composer package name'
-  git-ssh-clone:
-    required: false
-    type: boolean
-    default: false
-    description: 'Use SSH to clone the repository'
-  gpu-num:
-    required: true
-    type: number
-    description: 'Number of GPUs to use'
-  mcloud-api-key:
+  safe_directory:
     required: true
     type: string
-    description: 'MosaicML API key'
-  slack-notifications-bot-token:
+  wandb_api_key:
     required: false
-    type: string
-    description: 'Slack notifications bot token'
-  code-eval-device:
+  aws_access_key_id:
     required: false
-    type: string
-    description: 'Code evaluation device'
-  code-eval-url:
+  aws_secret_access_key:
     required: false
-    type: string
-    description: 'Code evaluation URL'
-  code-eval-apikey:
+  slack_notifications_bot_token:
     required: false
-    type: string
-    description: 'Code evaluation API key'
-
+  code_eval_device:
+    required: false
+  code_eval_url:
+    required: false
+  code_eval_apikey:
+    required: false
+  gcs_key:
+    required: false
+  gcs_secret:
+    required: false
+  azure_account_name:
+    required: false
+  azure_account_access_key:
+    required: false
 runs:
-  using: 'composite'
+  using: composite
   steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v3
+  - name: Checkout
+    uses: actions/checkout@v3
+  - name: Setup
+    shell: bash
+    run: |
+      set -ex
+      export PATH=/composer-python:$PATH
+      export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
+      python -m pip install --upgrade 'pip<23' wheel
+      python -m pip install --upgrade .${{ inputs.pip-deps }}
+  - name: Run Tests
+    id: tests
+    shell: bash
+    run: |
+      set -ex
+      export PATH=/composer-python:$PATH
+      export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
+      export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
+      export WANDB_PROJECT='${{ inputs.pytest_wandb_project }}'
+      export AWS_ACCESS_KEY_ID='${{ inputs.aws_access_key_id }}'
+      export AWS_SECRET_ACCESS_KEY='${{ inputs.aws_secret_access_key }}'
+      export CODE_EVAL_DEVICE='${{ inputs.code_eval_device }}'
+      export CODE_EVAL_URL='${{ inputs.code_eval_url }}'
+      export CODE_EVAL_APIKEY='${{ inputs.code_eval_apikey }}'
+      export GCS_KEY='${{ inputs.gcs_key }}'
+      export GCS_SECRET='${{ inputs.gcs_secret }}'
+      export AZURE_ACCOUNT_NAME='${{ inputs.azure_account_name }}'
+      export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
+      export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
 
-    - name: Set Environment Variables
-      shell: bash
-      run: |
-        export MOSAICML_API_KEY='${{ inputs.mcloud-api-key }}'
-        export SLACK_NOTIFICATIONS_BOT_TOKEN='${{ inputs.slack-notifications-bot-token }}'
-        export CODE_EVAL_DEVICE='${{ inputs.code-eval-device }}'
-        export CODE_EVAL_URL='${{ inputs.code-eval-url }}'
-        export CODE_EVAL_APIKEY='${{ inputs.code-eval-apikey }}'
+      # Necessary to run git diff for doctests
+      git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
+      make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
+      make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
-    - name: Setup Python
-      uses: actions/setup-python@v4
-      with:
-        python-version: ${{ inputs.python-version }}
-
-    - name: Cache pip
-      uses: actions/cache@v3
-      with:
-        path: ~/.cache/pip
-        key: ${{ runner.os }}-pip-${{ hashFiles('setup.py') }}
-        restore-keys: |
-          ${{ runner.os }}-pip-
-          ${{ runner.os }}-
-
-    - name: Setup MCLI
-      shell: bash
-      run: |
-        set -ex
-        python -m pip install mosaicml-cli
-        mcli version
-
-    - name: Submit Run
-      id: tests
-      shell: bash
-      run: |
-        set -ex
-
-        PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
-        REF_ARGS=""
-
-        # Use the PR number if it exists, commit SHA for protected branches and the branch name otherwise
-        if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
-          if [[ "$GITHUB_REF" =~ "refs/heads/dev" || "$GITHUB_REF" =~ "refs/heads/main" || \
-            "$GITHUB_REF" =~ "refs/heads/release" ]]; then
-            REF_ARGS="--git_commit $GITHUB_SHA"
-          else
-            REF_ARGS="--git_branch $GITHUB_REF_NAME"
-          fi
-        else
-          REF_ARGS="--pr_number $PR_NUMBER"
-        fi
-
-        python .github/mcli/mcli_pytest.py \
-          --image '${{ inputs.container }}' \
-          --git_repo '${{ inputs.git-repo }}' \
-          --pip_deps '${{ inputs.pip-deps }}' \
-          --pip_package_name '${{ inputs.composer-package-name }}' \
-          --pytest_markers '${{ inputs.pytest-markers }}' \
-          --pytest_command '${{ inputs.pytest-command }}' \
-          --timeout ${{ inputs.mcloud-timeout }} \
-          --gpu_num ${{ inputs.gpu-num }} \
-          --git_ssh_clone ${{ inputs.git-ssh-clone }} \
-          ${REF_ARGS}
+      python -m coverage combine
+  - uses: actions/upload-artifact@v3
+    with:
+      name: coverage-${{ github.sha }}-${{ inputs.name }}
+      path: .coverage
