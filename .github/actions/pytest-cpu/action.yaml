@@ -1,6 +1,6 @@
 name: Pytest CPU
 inputs:
-  composer_package_name:
+  composer-package-name:
     required: false
     type: string
   container:
@@ -24,7 +24,7 @@ inputs:
   pytest-wandb-project:
     required: false
     type: string
-  safe_directory:
+  safe-directory:
     required: true
     type: string
   wandb-api-key:
