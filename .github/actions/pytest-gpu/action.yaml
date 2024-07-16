@@ -50,17 +50,22 @@ inputs:
     required: false
   code-eval-apikey:
     required: false
-jobs:
-  pytest-gpu:
-    timeout-minutes: ${{ inputs.gha-timeout }}
-    env:
-      MOSAICML_API_KEY: ${{ secrets.mcloud-api-key }}
+runs:
+  using: composite
     steps:
     - name: Checkout Repo
       uses: actions/checkout@v3
       with:
         repository: "mosaicml/ci-testing"
         ref: "v0.0.9"
+    - name: Set Environment Variables
+      shell: bash
+      run: |
+        export MOSAICML_API_KEY='${{ inputs.mcloud_api_key }}'
+        export SLACK_NOTIFICATIONS_BOT_TOKEN='${{ inputs.slack_notifications_bot_token }}'
+        export CODE_EVAL_DEVICE='${{ inputs.code_eval_device }}'
+        export CODE_EVAL_URL='${{ inputs.code_eval_url }}'
+        export CODE_EVAL_APIKEY='${{ inputs.code_eval_apikey }}'
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
