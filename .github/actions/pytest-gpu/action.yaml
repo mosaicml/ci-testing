@@ -3,52 +3,52 @@ inputs:
   container:
     required: true
     type: string
-  gha-timeout:
+  gha_timeout:
     required: false
     type: number
     default: 60
-  git-repo:
+  git_repo:
     required: true
     type: string
   name:
     required: true
     type: string
-  pip-deps:
+  pip_deps:
     required: true
     type: string
-  pytest-command:
+  pytest_command:
     required: true
     type: string
-  pytest-markers:
+  pytest_markers:
     required: true
     type: string
-  python-version:
+  python_version:
     required: false
     type: string
     default: 3.9
-  mcloud-timeout:
+  mcloud_timeout:
     required: false
     type: number
     default: 2700
-  composer-package-name:
+  composer_package_name:
     required: false
     type: string
-  git-ssh-clone:
+  git_ssh_clone:
     required: false
     type: boolean
     default: false
   gpu_num:
     required: true
     type: number
-  mcloud-api-key:
+  mcloud_api_key:
     required: true
-  slack-notifications-bot-token:
+  slack_notifications_bot_token:
     required: false
-  code-eval-device:
+  code_eval_device:
     required: false
-  code-eval-url:
+  code_eval_url:
     required: false
-  code-eval-apikey:
+  code_eval_apikey:
     required: false
 runs:
   using: composite
@@ -61,11 +61,11 @@ runs:
     - name: Set Environment Variables
       shell: bash
       run: |
-        export MOSAICML_API_KEY='${{ inputs.mcloud-api-key }}'
-        export SLACK_NOTIFICATIONS_BOT_TOKEN='${{ inputs.slack-notifications-bot-token }}'
-        export CODE_EVAL_DEVICE='${{ inputs.code-eval-device }}'
-        export CODE_EVAL_URL='${{ inputs.code-eval-url }}'
-        export CODE_EVAL_APIKEY='${{ inputs.code-eval-apikey }}'
+        export MOSAICML_API_KEY='${{ inputs.mcloud_api_key }}'
+        export SLACK_NOTIFICATIONS_BOT_TOKEN='${{ inputs.slack_notifications_bot_token }}'
+        export CODE_EVAL_DEVICE='${{ inputs.code_eval_device }}'
+        export CODE_EVAL_URL='${{ inputs.code_eval_url }}'
+        export CODE_EVAL_APIKEY='${{ inputs.code_eval_apikey }}'
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
@@ -109,12 +109,12 @@ runs:
 
         python .github/mcli/mcli_pytest.py \
           --image '${{ inputs.container }}' \
-          --git_repo '${{ inputs.git-repo }}' \
-          --pip_deps '${{ inputs.pip-deps }}' \
-          --pip_package_name '${{ inputs.composer-package-name }}' \
-          --pytest_markers '${{ inputs.pytest-markers }}' \
-          --pytest_command '${{ inputs.pytest-command }}' \
-          --timeout ${{ inputs.mcloud-timeout }} \
+          --git_repo '${{ inputs.git_repo }}' \
+          --pip_deps '${{ inputs.pip_deps }}' \
+          --pip_package_name '${{ inputs.composer_package_name }}' \
+          --pytest_markers '${{ inputs.pytest_markers }}' \
+          --pytest_command '${{ inputs.pytest_command }}' \
+          --timeout ${{ inputs.mcloud_timeout }} \
           --gpu_num ${{ inputs.gpu_num }} \
-          --git_ssh_clone ${{ inputs.git-ssh-clone }} \
+          --git_ssh_clone ${{ inputs.git_ssh_clone }} \
           ${REF_ARGS}
