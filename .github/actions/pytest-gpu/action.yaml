@@ -57,7 +57,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: "mosaicml/ci-testing"
-        ref: "v0.0.9"
+        ref: "kevin/remove-pin-version"
     - name: Set Environment Variables
       shell: bash
       run: |
