@@ -37,7 +37,7 @@ inputs:
     required: false
     type: boolean
     default: false
-  gpu-num:
+  gpu_num:
     required: true
     type: number
   mcloud-api-key:
@@ -115,6 +115,6 @@ runs:
           --pytest_markers '${{ inputs.pytest-markers }}' \
           --pytest_command '${{ inputs.pytest-command }}' \
           --timeout ${{ inputs.mcloud-timeout }} \
-          --gpu_num ${{ inputs.gpu-num }} \
+          --gpu_num ${{ inputs.gpu_num }} \
           --git_ssh_clone ${{ inputs.git-ssh-clone }} \
           ${REF_ARGS}
