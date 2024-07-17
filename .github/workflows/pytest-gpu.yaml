@@ -15,7 +15,7 @@ on:
       ci_repo_ref:
         required: false
         type: string
-        default: "latest"
+        default: "main"
       name:
         required: true
         type: string
