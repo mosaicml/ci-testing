@@ -1,0 +1,120 @@
+name: Pytest GPU
+inputs:
+  container:
+    required: true
+    type: string
+  gha_timeout:
+    required: false
+    type: number
+    default: 60
+  git_repo:
+    required: true
+    type: string
+  name:
+    required: true
+    type: string
+  pip_deps:
+    required: true
+    type: string
+  pytest_command:
+    required: true
+    type: string
+  pytest_markers:
+    required: true
+    type: string
+  python_version:
+    required: false
+    type: string
+    default: 3.9
+  mcloud_timeout:
+    required: false
+    type: number
+    default: 2700
+  composer_package_name:
+    required: false
+    type: string
+  git_ssh_clone:
+    required: false
+    type: boolean
+    default: false
+  gpu_num:
+    required: true
+    type: number
+  mcloud_api_key:
+    required: true
+  slack_notifications_bot_token:
+    required: false
+  code_eval_device:
+    required: false
+  code_eval_url:
+    required: false
+  code_eval_apikey:
+    required: false
+runs:
+  using: composite
+  steps:
+    - name: Checkout Repo
+      uses: actions/checkout@v3
+      with:
+        repository: "mosaicml/ci-testing"
+        ref: "kevin/remove-pin-version"
+    - name: Set Environment Variables
+      shell: bash
+      run: |
+        export MOSAICML_API_KEY='${{ inputs.mcloud_api_key }}'
+        export SLACK_NOTIFICATIONS_BOT_TOKEN='${{ inputs.slack_notifications_bot_token }}'
+        export CODE_EVAL_DEVICE='${{ inputs.code_eval_device }}'
+        export CODE_EVAL_URL='${{ inputs.code_eval_url }}'
+        export CODE_EVAL_APIKEY='${{ inputs.code_eval_apikey }}'
+    - name: Setup Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ inputs.python-version }}
+    - name: Cache pip
+      uses: actions/cache@v3
+      with:
+        # This path is specific to Ubuntu
+        path: ~/.cache/pip
+        # Look to see if there is a cache hit for the corresponding requirements file
+        key: ${{ runner.os }}-pip-${{ hashFiles('setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
+          ${{ runner.os }}-
+    - name: Setup MCLI
+      shell: bash
+      run: |
+        set -ex
+        python -m pip install mosaicml-cli
+        mcli version
+    - name: Submit Run
+      id: tests
+      shell: bash
+      run: |
+        set -ex
+
+        PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
+        REF_ARGS=""
+
+        # Use the PR number if it exists, commit SHA for protected branches and the branch name otherwise
+        if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
+          if [[ "$GITHUB_REF" =~ "refs/heads/dev" || "$GITHUB_REF" =~ "refs/heads/main" || \
+            "$GITHUB_REF" =~ "refs/heads/release" ]]; then
+            REF_ARGS="--git_commit $GITHUB_SHA"
+          else
+            REF_ARGS="--git_branch $GITHUB_REF_NAME"
+          fi
+        else
+          REF_ARGS="--pr_number $PR_NUMBER"
+        fi
+
+        python .github/mcli/mcli_pytest.py \
+          --image '${{ inputs.container }}' \
+          --git_repo '${{ inputs.git_repo }}' \
+          --pip_deps '${{ inputs.pip_deps }}' \
+          --pip_package_name '${{ inputs.composer_package_name }}' \
+          --pytest_markers '${{ inputs.pytest_markers }}' \
+          --pytest_command '${{ inputs.pytest_command }}' \
+          --timeout ${{ inputs.mcloud_timeout }} \
+          --gpu_num ${{ inputs.gpu_num }} \
+          --git_ssh_clone ${{ inputs.git_ssh_clone }} \
+          ${REF_ARGS}
