@@ -12,6 +12,10 @@ on:
       git_repo:
         required: true
         type: string
+      ci_repo_ref:
+        required: false
+        type: string
+        default: "latest"
       name:
         required: true
         type: string
@@ -64,7 +68,7 @@ jobs:
       uses: actions/checkout@v3
       with:
         repository: "mosaicml/ci-testing"
-        ref: "v0.0.9"
+        ref: ${{ inputs.ci_repo_ref }}
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
