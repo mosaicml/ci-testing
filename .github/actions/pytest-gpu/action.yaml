@@ -26,6 +26,10 @@ inputs:
     required: false
     type: string
     default: 3.9
+  repo_ref:
+    required: false
+    type: string
+    default: "latest"
   mcloud_timeout:
     required: false
     type: number
@@ -57,7 +61,7 @@ runs:
       uses: actions/checkout@v3
       with:
         repository: "mosaicml/ci-testing"
-        ref: "kevin/remove-pin-version"
+        ref: ${{ inputs.repo_ref }}
     - name: Set Environment Variables
       shell: bash
       run: |
