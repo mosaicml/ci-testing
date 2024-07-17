@@ -29,7 +29,7 @@ inputs:
   ci_repo_ref:
     required: false
     type: string
-    default: "latest"
+    default: "main"
   mcloud_timeout:
     required: false
     type: number
