@@ -62,14 +62,6 @@ runs:
       with:
         repository: "mosaicml/ci-testing"
         ref: ${{ inputs.ci_repo_ref }}
-    - name: Set Environment Variables
-      shell: bash
-      run: |
-        export MOSAICML_API_KEY='${{ inputs.mcloud_api_key }}'
-        export SLACK_NOTIFICATIONS_BOT_TOKEN='${{ inputs.slack_notifications_bot_token }}'
-        export CODE_EVAL_DEVICE='${{ inputs.code_eval_device }}'
-        export CODE_EVAL_URL='${{ inputs.code_eval_url }}'
-        export CODE_EVAL_APIKEY='${{ inputs.code_eval_apikey }}'
     - name: Setup Python
       uses: actions/setup-python@v4
       with:
@@ -93,6 +85,12 @@ runs:
     - name: Submit Run
       id: tests
       shell: bash
+      env:
+        MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
+        SLACK_NOTIFICATIONS_BOT_TOKEN: ${{ inputs.slack_notifications_bot_token }}
+        CODE_EVAL_DEVICE: ${{ inputs.code_eval_device }}
+        CODE_EVAL_URL: ${{ inputs.code_eval_url }}
+        CODE_EVAL_APIKEY: ${{ inputs.code_eval_apikey }}
       run: |
         set -ex
 
