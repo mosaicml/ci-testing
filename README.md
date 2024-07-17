@@ -3,7 +3,7 @@ This repository contains code for CI/CD and testing of MosaicML repos including 
 
 # Release Instructions
 
-1. When bumping patch/minor/major, also add a `latest` tag. This is used in the `pytest-gpu/action.yaml` as a default input param.
+1. When bumping patch/minor/major, also select `Set as the latest release`.
 
 
 ## GPU Tests
