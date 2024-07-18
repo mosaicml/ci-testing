@@ -1,0 +1,105 @@
+name: Pytest CPU
+inputs:
+  composer_package_name:
+    required: false
+    type: string
+  container:
+    required: true
+    type: string
+  name:
+    required: true
+    type: string
+  pip_deps:
+    required: true
+    type: string
+  pytest_command:
+    required: true
+    type: string
+  pytest_markers:
+    required: true
+    type: string
+  pytest_wandb_entity:
+    required: false
+    type: string
+  pytest_wandb_project:
+    required: false
+    type: string
+  safe_directory:
+    required: true
+    type: string
+  wandb_api_key:
+    required: false
+    description: "wandb API key - Pass in as repo secret"
+  aws_access_key_id:
+    required: false
+    description: "aws access key id - Pass in as repo secret"
+  aws_secret_access_key:
+    required: false
+    description: "aws secret access key - Pass in as repo secret"
+  slack_notifications_bot_token:
+    required: false
+    description: "Slack notifications bot token - Pass in as repo secret"
+  code_eval_device:
+    required: false
+    description: "CodeEval device - Pass in as repo secret"
+  code_eval_url:
+    required: false
+    description: "CodeEval URL - Pass in as repo secret"
+  code_eval_apikey:
+    required: false
+    description: "CodeEval API key - Pass in as repo secret"
+  gcs_key:
+    required: false
+    description: "GCS key - Pass in as repo secret"
+  gcs_secret:
+    required: false
+    description: "GCS secret - Pass in as repo secret"
+  azure_account_name:
+    required: false
+    description: "Azure account name - Pass in as repo secret"
+  azure_account_access_key:
+    required: false
+    description: "Azure account access key - Pass in as repo secret"
+runs:
+  using: composite
+  steps:
+  - name: Checkout
+    uses: actions/checkout@v3
+  - name: Setup
+    shell: bash
+    run: |
+      set -ex
+      export PATH=/composer-python:$PATH
+      export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
+      python -m pip install --upgrade 'pip<23' wheel
+      python -m pip install --upgrade .${{ inputs.pip_deps }}
+  - name: Run Tests
+    id: tests
+    shell: bash
+    run: |
+      set -ex
+      export PATH=/composer-python:$PATH
+      export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
+      export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
+      export WANDB_PROJECT='${{ inputs.pytest_wandb_project }}'
+      export AWS_ACCESS_KEY_ID='${{ inputs.aws_access_key_id }}'
+      export AWS_SECRET_ACCESS_KEY='${{ inputs.aws_secret_access_key }}'
+      export CODE_EVAL_DEVICE='${{ inputs.code_eval_device }}'
+      export CODE_EVAL_URL='${{ inputs.code_eval_url }}'
+      export CODE_EVAL_APIKEY='${{ inputs.code_eval_apikey }}'
+      export GCS_KEY='${{ inputs.gcs_key }}'
+      export GCS_SECRET='${{ inputs.gcs_secret }}'
+      export AZURE_ACCOUNT_NAME='${{ inputs.azure_account_name }}'
+      export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
+      export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
+
+      # Necessary to run git diff for doctests
+      git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
+      make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
+      make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
+
+      python -m coverage combine
+  - uses: actions/upload-artifact@v3
+    with:
+      name: coverage-${{ github.sha }}-${{ inputs.name }}
+      path: .coverage
