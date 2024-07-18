@@ -11,7 +11,7 @@ inputs:
     required: true
     type: string
   ci_repo_gpu_test_ref:
-    description: "CI Repo version of the GPU tests to run"
+    description: "CI repo version of the GPU tests to run"
     required: true
     type: string
   name:
