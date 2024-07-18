@@ -1,20 +1,19 @@
 name: Pytest GPU
 inputs:
+  name:
+    required: true
+    type: string
   container:
     required: true
     type: string
-  gha_timeout:
-    required: false
+  gpu_num:
+    required: true
     type: number
-    default: 60
   git_repo:
     required: true
     type: string
   ci_repo_gpu_test_ref:
     description: "CI repo version of the GPU tests to run"
-    required: true
-    type: string
-  name:
     required: true
     type: string
   pip_deps:
@@ -26,6 +25,9 @@ inputs:
   pytest_markers:
     required: true
     type: string
+  mcloud_api_key:
+    required: true
+    description: "MosaicML API key - Pass in as repo secret"
   python_version:
     required: false
     type: string
@@ -37,16 +39,14 @@ inputs:
   composer_package_name:
     required: false
     type: string
+  gha_timeout:
+    required: false
+    type: number
+    default: 60
   git_ssh_clone:
     required: false
     type: boolean
     default: false
-  gpu_num:
-    required: true
-    type: number
-  mcloud_api_key:
-    required: true
-    description: "MosaicML API key - Pass in as repo secret"
   slack_notifications_bot_token:
     required: false
     description: "Slack notifications bot token - Pass in as repo secret"
