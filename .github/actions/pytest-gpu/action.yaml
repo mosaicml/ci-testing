@@ -10,6 +10,10 @@ inputs:
   git_repo:
     required: true
     type: string
+  ci_repo_ref:
+    description: "Version of the GPU tests to run"
+    required: true
+    type: string
   name:
     required: true
     type: string
@@ -58,15 +62,11 @@ inputs:
 runs:
   using: composite
   steps:
-    - name: Get action version
-      id: get_version
-      shell: bash
-      run: echo "action_version=${GITHUB_REF##*/}" >> $GITHUB_OUTPUT
     - name: Checkout Repo
       uses: actions/checkout@v3
       with:
         repository: "mosaicml/ci-testing"
-        ref: ${{ steps.get_version.outputs.action_version }}
+        ref: ${{ inputs.ci_repo_ref }}
     - name: Setup Python
       uses: actions/setup-python@v4
       with:

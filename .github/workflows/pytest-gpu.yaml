@@ -13,9 +13,9 @@ on:
         required: true
         type: string
       ci_repo_ref:
-        required: false
+        description: "Version of the GPU tests to run"
+        required: true
         type: string
-        default: "main"
       name:
         required: true
         type: string
