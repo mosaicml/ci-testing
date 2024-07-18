@@ -29,26 +29,37 @@ inputs:
     type: string
   wandb_api_key:
     required: false
+    description: "wandb API key - Pass in as repo secret"
   aws_access_key_id:
     required: false
+    description: "aws access key id - Pass in as repo secret"
   aws_secret_access_key:
     required: false
+    description: "aws secret access key - Pass in as repo secret"
   slack_notifications_bot_token:
     required: false
+    description: "Slack notifications bot token - Pass in as repo secret"
   code_eval_device:
     required: false
+    description: "CodeEval device - Pass in as repo secret"
   code_eval_url:
     required: false
+    description: "CodeEval URL - Pass in as repo secret"
   code_eval_apikey:
     required: false
+    description: "CodeEval API key - Pass in as repo secret"
   gcs_key:
     required: false
+    description: "GCS key - Pass in as repo secret"
   gcs_secret:
     required: false
+    description: "GCS secret - Pass in as repo secret"
   azure_account_name:
     required: false
+    description: "Azure account name - Pass in as repo secret"
   azure_account_access_key:
     required: false
+    description: "Azure account access key - Pass in as repo secret"
 runs:
   using: composite
   steps:
