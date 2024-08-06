@@ -10,7 +10,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      python -m pip install --upgrade 'pip<23' wheel
+      python -m pip install --upgrade pip wheel
       pip install coverage[toml]==6.5.0
   - name: Download artifacts
     uses: actions/download-artifact@v3
