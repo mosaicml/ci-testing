@@ -17,7 +17,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      python -m pip install --upgrade 'pip<23' wheel
+      python -m pip install --upgrade pip wheel
       python -m pip install --upgrade .${{ inputs.pip_deps }}
   - name: Run checks
     shell: bash
