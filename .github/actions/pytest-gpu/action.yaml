@@ -125,3 +125,22 @@ runs:
           --gpu_num ${{ inputs.gpu_num }} \
           --git_ssh_clone ${{ inputs.git_ssh_clone }} \
           ${REF_ARGS}
+    - name: Follow Run Logs
+      shell: bash
+      env:
+        MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
+      run: |
+        set -ex
+
+        python .github/mcli/follow_mcli_logs.py \
+          --name '${{ steps.tests.outputs.RUN_NAME }}'
+    - name: Stop Run if Cancelled
+      if: ${{ cancelled() }}
+      shell: bash
+      env:
+        MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
+      run: |
+        set -ex
+
+        python .github/mcli/cancel_mcli_run.py \
+          --name '${{ steps.tests.outputs.RUN_NAME }}'
