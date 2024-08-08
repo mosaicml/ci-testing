@@ -28,17 +28,14 @@ if __name__ == '__main__':
     parser.add_argument('--timeout', type=int, default=2700, help='Timeout for run (in seconds)')
     args = parser.parse_args()
 
-    name = args.name
     git_integration = {
         'integration_type': 'git_repo',
         'git_repo': args.git_repo,
         'ssh_clone': str(args.git_ssh_clone),
     }
     if args.git_branch is not None and args.git_commit is None:
-        name += f'-branch-{args.git_branch}'
         git_integration['git_branch'] = args.git_branch
     if args.git_commit is not None:
-        name += f'-commit-{args.git_commit}'
         git_integration['git_commit'] = args.git_commit
 
     repo_name = args.git_repo.split('/')[-1]
@@ -46,7 +43,6 @@ if __name__ == '__main__':
 
     # Checkout a specific PR if specified
     if args.pr_number is not None:
-        name += f'-pr-{args.pr_number}'
         command += f'''
 
         git fetch origin pull/{args.pr_number}/head:pr_branch
@@ -54,10 +50,6 @@ if __name__ == '__main__':
         git checkout pr_branch
 
         '''
-
-    # Shorten name if too long
-    if len(name) > 56:
-        name = name[:56]
 
     clear_tmp_path_flag = '-o tmp_path_retention_policy=none'
     command += f'''
@@ -85,7 +77,7 @@ if __name__ == '__main__':
     python -m coverage report
     '''
     config = RunConfig(
-        name=name,
+        name=args.name,
         compute={
             'cluster': args.cluster,
             'gpu_type': args.gpu_type,

@@ -87,6 +87,28 @@ runs:
         set -ex
         python -m pip install mosaicml-cli
         mcli version
+    - name: Get Run Name
+      id: run_name
+      shell: bash
+      run: |
+        set -ex
+
+        PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
+        REF_ARGS=""
+
+        # Use the PR number if it exists, commit SHA for protected branches and the branch name otherwise
+        if [ -z "$PR_NUMBER" ] || [ "$PR_NUMBER" = "null" ]; then
+          if [[ "$GITHUB_REF" =~ "refs/heads/dev" || "$GITHUB_REF" =~ "refs/heads/main" || \
+            "$GITHUB_REF" =~ "refs/heads/release" ]]; then
+            REF_ARGS="--git_commit $GITHUB_SHA"
+          else
+            REF_ARGS="--git_branch $GITHUB_REF_NAME"
+          fi
+        else
+          REF_ARGS="--pr_number $PR_NUMBER"
+        fi
+
+        python .github/mcli/get_mcli_run_name.py ${REF_ARGS}
     - name: Submit Run
       id: tests
       shell: bash
@@ -115,6 +137,7 @@ runs:
         fi
 
         python .github/mcli/mcli_pytest.py \
+          --name '${{ steps.run_name.outputs.RUN_NAME }}' \
           --image '${{ inputs.container }}' \
           --git_repo '${{ inputs.git_repo }}' \
           --pip_deps '${{ inputs.pip_deps }}' \
