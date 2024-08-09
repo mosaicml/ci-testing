@@ -4,9 +4,9 @@
 """Run pytest using MCLI."""
 
 import argparse
-import time
+import os
 
-from mcli import RunConfig, RunStatus, create_run, follow_run_logs, wait_for_run_status
+from mcli import RunConfig, create_run
 
 if __name__ == '__main__':
 
@@ -111,17 +111,5 @@ if __name__ == '__main__':
     run = create_run(config)
     print(f'[GHA] Run created: {run.name}')
 
-    # Wait until run starts before fetching logs
-    run = wait_for_run_status(run, status='running')
-    start_time = time.time()
-    print('[GHA] Run started. Following logs...')
-
-    # Print logs
-    for line in follow_run_logs(run):
-        print(line, end='')
-
-    print('[GHA] Run completed. Waiting for run to finish...')
-    run = wait_for_run_status(run, status=RunStatus.COMPLETED)
-
-    # Fail if command exited with non-zero exit code or timed out (didn't reach COMPLETED)
-    assert run.status == RunStatus.COMPLETED, f'Run {run.name} did not complete: {run.status} ({run.reason})'
+    with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
+        print(f'RUN_NAME={run.name}', file=fh)
