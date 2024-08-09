@@ -3,9 +3,6 @@ inputs:
   name:
     required: true
     type: string
-  container:
-    required: true
-    type: string
   gpu_num:
     required: true
     type: number
