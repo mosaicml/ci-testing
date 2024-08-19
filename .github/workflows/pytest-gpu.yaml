@@ -106,6 +106,7 @@ jobs:
         python .github/mcli/mcli_pytest.py \
           --image '${{ inputs.container }}' \
           --git_repo '${{ inputs.git_repo }}' \
+          --git_repo 'update_gpu_tests' \
           --pip_deps '${{ inputs.pip_deps }}' \
           --pip_package_name '${{ inputs.composer_package_name }}' \
           --pytest_markers '${{ inputs.pytest-markers }}' \
