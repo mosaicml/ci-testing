@@ -74,8 +74,8 @@ runs:
       python -m venv ~/.local
       source ~/.local/bin/activate
       pip install uv
-      uv pip install --upgrade --target "$(python3 -m site --user-site)" pip wheel
-      uv pip install --upgrade --target "$(python3 -m site --user-site)" .${{ inputs.pip_deps }}
+      uv pip install --upgrade pip wheel
+      uv pip install --upgrade .${{ inputs.pip_deps }}
   - name: Run Tests
     id: tests
     shell: bash

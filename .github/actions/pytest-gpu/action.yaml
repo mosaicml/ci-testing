@@ -85,6 +85,8 @@ runs:
       shell: bash
       run: |
         set -ex
+        python -m venv ~/.local
+        source ~/.local/bin/activate
         pip install uv
         uv pip install --system mosaicml-cli
         mcli version
@@ -99,7 +101,7 @@ runs:
         CODE_EVAL_APIKEY: ${{ inputs.code_eval_apikey }}
       run: |
         set -ex
-
+        source ~/.local/bin/activate
         PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
         REF_ARGS=""
 
@@ -132,7 +134,7 @@ runs:
         MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
       run: |
         set -ex
-
+        source ~/.local/bin/activate
         python .github/mcli/follow_mcli_logs.py \
           --name '${{ steps.tests.outputs.RUN_NAME }}'
     - name: Stop Run if Cancelled
@@ -142,6 +144,6 @@ runs:
         MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
       run: |
         set -ex
-
+        source ~/.local/bin/activate
         python .github/mcli/cancel_mcli_run.py \
           --name '${{ steps.tests.outputs.RUN_NAME }}'
