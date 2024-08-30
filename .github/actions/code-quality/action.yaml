@@ -23,9 +23,9 @@ runs:
     shell: bash
     run: |
       set -ex
-      pip install uv
-      uv pip install --upgrade pip wheel
-      uv pip install --upgrade .${{ inputs.pip_deps }}
+      pip install --system uv
+      uv pip install --upgrade --system pip wheel
+      uv pip install --upgrade --system .${{ inputs.pip_deps }}
   - name: Run checks
     shell: bash
     run: |
