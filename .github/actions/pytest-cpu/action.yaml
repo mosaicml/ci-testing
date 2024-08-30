@@ -3,6 +3,9 @@ inputs:
   composer_package_name:
     required: false
     type: string
+  container:
+    required: true
+    type: string
   name:
     required: true
     type: string
@@ -72,7 +75,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      . .venv/bin/activate
+      export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
       pip install uv
       uv pip install --upgrade pip wheel
@@ -82,7 +85,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      . .venv/bin/activate
+      export PATH=/composer-python:$PATH
       export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
       export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
       export WANDB_PROJECT='${{ inputs.pytest_wandb_project }}'
