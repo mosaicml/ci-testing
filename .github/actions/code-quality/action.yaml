@@ -16,16 +16,16 @@ runs:
   - name: Activate virtualenv
     shell: bash
     run: |
-      python -m venv .venv
-      . .venv/bin/activate
+      python -m venv ../.venv
+      . ../.venv/bin/activate
       echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
       pip install uv
-      uv pip install --upgrade pip wheel
-      uv pip install --upgrade .${{ inputs.pip_deps }}
+      uv pip install --upgrade --system pip wheel
+      uv pip install --upgrade --system .${{ inputs.pip_deps }}
   - name: Run checks
     shell: bash
     run: |
