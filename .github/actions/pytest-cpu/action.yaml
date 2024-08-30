@@ -72,8 +72,8 @@ runs:
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
       pip install uv
-      uv pip install --upgrade --system pip wheel
-      uv pip install --upgrade --system .${{ inputs.pip_deps }}
+      uv pip install --upgrade --user pip wheel
+      uv pip install --upgrade --user .${{ inputs.pip_deps }}
   - name: Run Tests
     id: tests
     shell: bash
