@@ -102,7 +102,11 @@ runs:
 
       ls
 
+      uv pip list
+
       . .venv/bin/activate
+
+      uv pip list
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
