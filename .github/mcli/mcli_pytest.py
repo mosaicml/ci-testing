@@ -67,6 +67,12 @@ if __name__ == '__main__':
     which python
     which pip
 
+    python -m venv --system-site-packages .venv
+    . .venv/bin/activate
+
+    which python
+    which pip
+
     pip install uv
     uv pip install --upgrade --system --no-build-isolation .{args.pip_deps}
 
