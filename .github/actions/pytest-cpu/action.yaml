@@ -75,8 +75,10 @@ runs:
     shell: bash
     run: |
       set -ex
+      which python
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
+      which python
       pip install uv
       uv pip install --upgrade pip wheel
       uv pip install --upgrade .${{ inputs.pip_deps }}
@@ -85,6 +87,7 @@ runs:
     shell: bash
     run: |
       set -ex
+      which python
       export PATH=/composer-python:$PATH
       export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
       export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
@@ -100,8 +103,10 @@ runs:
       export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
 
+      which python
       # Activate venv
       . .venv/bin/activate
+      which python
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
