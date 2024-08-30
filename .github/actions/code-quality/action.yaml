@@ -23,7 +23,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      pip install --system uv
+      pip install uv
       uv pip install --upgrade --system pip wheel
       uv pip install --upgrade --system .${{ inputs.pip_deps }}
   - name: Run checks

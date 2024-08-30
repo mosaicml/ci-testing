@@ -67,7 +67,7 @@ if __name__ == '__main__':
     which python
     which pip
 
-    pip install --system uv
+    pip install uv
     uv pip install --upgrade --system --no-build-isolation .{args.pip_deps}
 
     export COMMON_ARGS="-v --durations=20 -m '{args.pytest_markers}' {clear_tmp_path_flag}"

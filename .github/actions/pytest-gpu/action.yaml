@@ -91,7 +91,7 @@ runs:
       shell: bash
       run: |
         set -ex
-        pip install --system uv
+        pip install uv
         uv pip install --system mosaicml-cli
         mcli version
     - name: Submit Run

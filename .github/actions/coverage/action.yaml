@@ -16,7 +16,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      pip install --system uv
+      pip install uv
       uv pip install --upgrade --system pip wheel
       uv pip install --system coverage[toml]==6.5.0
   - name: Download artifacts
