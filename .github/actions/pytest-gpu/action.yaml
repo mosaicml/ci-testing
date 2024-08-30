@@ -82,7 +82,7 @@ runs:
       run: |
         set -ex
         pip install uv
-        uv pip install --system mosaicml-cli
+        uv pip install mosaicml-cli
         mcli version
     - name: Submit Run
       id: tests
@@ -93,7 +93,6 @@ runs:
         CODE_EVAL_DEVICE: ${{ inputs.code_eval_device }}
         CODE_EVAL_URL: ${{ inputs.code_eval_url }}
         CODE_EVAL_APIKEY: ${{ inputs.code_eval_apikey }}
-        VIRTUAL_ENV: ${{ runner.workspace }}/.venv
       run: |
         set -ex
         PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
