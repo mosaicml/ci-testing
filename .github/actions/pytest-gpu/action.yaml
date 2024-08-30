@@ -101,7 +101,6 @@ runs:
         CODE_EVAL_APIKEY: ${{ inputs.code_eval_apikey }}
       run: |
         set -ex
-        source ~/.local/bin/activate
         PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
         REF_ARGS=""
 
@@ -117,7 +116,7 @@ runs:
           REF_ARGS="--pr_number $PR_NUMBER"
         fi
 
-        python .github/mcli/mcli_pytest.py \
+        ~/.local/bin/python .github/mcli/mcli_pytest.py \
           --image '${{ inputs.container }}' \
           --git_repo '${{ inputs.git_repo }}' \
           --pip_deps '${{ inputs.pip_deps }}' \
@@ -134,8 +133,7 @@ runs:
         MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
       run: |
         set -ex
-        source ~/.local/bin/activate
-        python .github/mcli/follow_mcli_logs.py \
+        ~/.local/bin/python .github/mcli/follow_mcli_logs.py \
           --name '${{ steps.tests.outputs.RUN_NAME }}'
     - name: Stop Run if Cancelled
       if: ${{ cancelled() }}
@@ -144,6 +142,5 @@ runs:
         MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
       run: |
         set -ex
-        source ~/.local/bin/activate
-        python .github/mcli/cancel_mcli_run.py \
+        ~/.local/bin/python .github/mcli/cancel_mcli_run.py \
           --name '${{ steps.tests.outputs.RUN_NAME }}'
