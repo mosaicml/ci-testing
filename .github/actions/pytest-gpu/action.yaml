@@ -85,7 +85,8 @@ runs:
       shell: bash
       run: |
         set -ex
-        python -m pip install mosaicml-cli
+        pip install uv
+        uv pip install mosaicml-cli
         mcli version
     - name: Submit Run
       id: tests
