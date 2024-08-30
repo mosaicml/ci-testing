@@ -6,19 +6,12 @@ inputs:
 runs:
   using: composite
   steps:
-  - name: Activate virtualenv
-    shell: bash
-    run: |
-      python -m venv .venv
-      . .venv/bin/activate
-      echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
-      pip install uv
-      uv pip install --upgrade pip wheel
-      uv pip install coverage[toml]==6.5.0
+      python -m pip install --upgrade pip wheel
+      pip install coverage[toml]==6.5.0
   - name: Download artifacts
     uses: actions/download-artifact@v3
     with:
@@ -27,6 +20,7 @@ runs:
     shell: bash
     run: |
       set -ex
+
       # Flatten the coverage files
       # yamllint disable-line rule:line-length
       ls ${{ inputs.download-path }} | while read x; do mv ${{ inputs.download-path }}/$x/.coverage .coverage.$x; done

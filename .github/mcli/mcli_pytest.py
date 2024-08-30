@@ -64,11 +64,7 @@ if __name__ == '__main__':
 
     export COMPOSER_PACKAGE_NAME='{args.pip_package_name}'
 
-    python -m venv --system-site-packages .venv
-    . .venv/bin/activate
-
-    pip install uv
-    uv pip install --upgrade --no-build-isolation .{args.pip_deps}
+    pip install --upgrade --user .{args.pip_deps}
 
     export COMMON_ARGS="-v --durations=20 -m '{args.pytest_markers}' {clear_tmp_path_flag}"
     '''
