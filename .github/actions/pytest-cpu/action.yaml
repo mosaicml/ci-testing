@@ -65,14 +65,21 @@ runs:
   steps:
   - name: Checkout
     uses: actions/checkout@v3
+  - name: Activate virtualenv
+    shell: bash
+    run: |
+      python -m venv .venv
+      . .venv/bin/activate
+      echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
-      python -m pip install --upgrade pip wheel
-      python -m pip install --upgrade .${{ inputs.pip_deps }}
+      pip install uv
+      uv pip install --upgrade pip wheel
+      uv pip install --upgrade .${{ inputs.pip_deps }}
   - name: Run Tests
     id: tests
     shell: bash
