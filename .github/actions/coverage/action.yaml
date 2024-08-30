@@ -6,12 +6,16 @@ inputs:
 runs:
   using: composite
   steps:
+  - name: Activate virtualenv
+    shell: bash
+    run: |
+      python -m venv .venv
+      . .venv/bin/activate
+      echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
-      python -m venv ~/.local
-      source ~/.local/bin/activate
       pip install uv
       uv pip install --upgrade --system pip wheel
       uv pip install --system coverage[toml]==6.5.0
@@ -23,7 +27,6 @@ runs:
     shell: bash
     run: |
       set -ex
-      source ~/.local/bin/activate
       # Flatten the coverage files
       # yamllint disable-line rule:line-length
       ls ${{ inputs.download-path }} | while read x; do mv ${{ inputs.download-path }}/$x/.coverage .coverage.$x; done

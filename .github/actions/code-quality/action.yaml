@@ -13,17 +13,20 @@ runs:
   - uses: actions/setup-python@v4
     with:
       python-version: ${{ inputs.python_version }}
+  - name: Activate virtualenv
+    shell: bash
+    run: |
+      python -m venv .venv
+      . .venv/bin/activate
+      echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
-      python -m venv ~/.local
-      source ~/.local/bin/activate
       pip install uv
       uv pip install --upgrade --system pip wheel
       uv pip install --upgrade --system .${{ inputs.pip_deps }}
   - name: Run checks
     shell: bash
     run: |
-      source ~/.local/bin/activate
       pre-commit run --all-files
