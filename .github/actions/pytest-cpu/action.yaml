@@ -102,6 +102,7 @@ runs:
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
+      which coverage
       make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
       make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
