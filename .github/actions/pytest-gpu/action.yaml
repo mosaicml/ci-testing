@@ -77,16 +77,6 @@ runs:
         python -m venv .venv
         . .venv/bin/activate
         echo PATH=$PATH >> $GITHUB_ENV
-    # - name: Cache pip
-    #   uses: actions/cache@v3
-    #   with:
-    #     # This path is specific to Ubuntu
-    #     path: ~/.cache/pip
-    #     # Look to see if there is a cache hit for the corresponding requirements file
-    #     key: ${{ runner.os }}-pip-${{ hashFiles('setup.py') }}
-    #     restore-keys: |
-    #       ${{ runner.os }}-pip-
-    #       ${{ runner.os }}-
     - name: Setup MCLI
       shell: bash
       run: |
@@ -103,6 +93,7 @@ runs:
         CODE_EVAL_DEVICE: ${{ inputs.code_eval_device }}
         CODE_EVAL_URL: ${{ inputs.code_eval_url }}
         CODE_EVAL_APIKEY: ${{ inputs.code_eval_apikey }}
+        VIRTUAL_ENV: ${{ runner.workspace }}/.venv
       run: |
         set -ex
         PR_NUMBER="$(jq --raw-output .pull_request.number "$GITHUB_EVENT_PATH")"
