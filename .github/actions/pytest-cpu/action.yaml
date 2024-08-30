@@ -62,20 +62,14 @@ runs:
   steps:
   - name: Checkout
     uses: actions/checkout@v3
-  - name: Activate virtualenv
-    shell: bash
-    run: |
-      python -m venv .venv
-      . .venv/bin/activate
-      echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
-      . .venv/bin/activate
-      which python
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
-      which python
+      python -m venv .venv
+      . .venv/bin/activate
+      echo PATH=$PATH >> $GITHUB_ENV
       pip install uv
       uv pip install --upgrade pip wheel
       uv pip install --upgrade .${{ inputs.pip_deps }}
@@ -100,8 +94,8 @@ runs:
       which python
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
 
-      which python
-      which python
+      # Activate venv
+      . .venv/bin/activate
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
