@@ -71,6 +71,8 @@ runs:
       set -ex
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
+      python -m venv ~/.local
+      source ~/.local/bin/activate
       pip install uv
       uv pip install --upgrade --target "$(python3 -m site --user-site)" pip wheel
       uv pip install --upgrade --target "$(python3 -m site --user-site)" .${{ inputs.pip_deps }}
@@ -79,6 +81,7 @@ runs:
     shell: bash
     run: |
       set -ex
+      source ~/.local/bin/activate
       export PATH=/composer-python:$PATH
       export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
       export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
