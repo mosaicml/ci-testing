@@ -21,7 +21,7 @@ runs:
       set -ex
       pip install uv
       uv pip install --upgrade pip wheel
-      uv pip install --upgrade .
+      uv pip install .
       uv pip install pytest==7.2.1 pytest_codeblocks==0.16.1
   - name: Run checks
     shell: bash
