@@ -79,7 +79,7 @@ runs:
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
       pip install uv
       uv pip install --upgrade pip wheel
-      uv pip install --upgrade .${{ inputs.pip_deps }}
+      uv pip install .${{ inputs.pip_deps }}
   - name: Run Tests
     id: tests
     shell: bash
