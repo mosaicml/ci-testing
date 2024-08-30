@@ -75,6 +75,8 @@ runs:
     shell: bash
     run: |
       set -ex
+      # Activate venv
+      . .venv/bin/activate
       which python
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
@@ -106,8 +108,6 @@ runs:
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
 
       which python
-      # Activate venv
-      . .venv/bin/activate
       which python
 
       # Necessary to run git diff for doctests
