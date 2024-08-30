@@ -98,6 +98,11 @@ runs:
       make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
       make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
+      which python
+      which pip
+      which pytest
+      which composer
+
       python -m coverage combine
   - uses: actions/upload-artifact@v3
     with:
