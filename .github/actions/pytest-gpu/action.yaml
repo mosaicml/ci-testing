@@ -71,6 +71,12 @@ runs:
       uses: actions/setup-python@v4
       with:
         python-version: ${{ inputs.python_version }}
+    - name: Activate virtualenv
+      shell: bash
+      run: |
+        python -m venv .venv
+        . .venv/bin/activate
+        echo PATH=$PATH >> $GITHUB_ENV
     - name: Cache pip
       uses: actions/cache@v3
       with:
@@ -85,8 +91,6 @@ runs:
       shell: bash
       run: |
         set -ex
-        python -m venv ~/.local
-        source ~/.local/bin/activate
         pip install uv
         uv pip install --system mosaicml-cli
         mcli version
@@ -116,7 +120,7 @@ runs:
           REF_ARGS="--pr_number $PR_NUMBER"
         fi
 
-        ~/.local/bin/python .github/mcli/mcli_pytest.py \
+        python .github/mcli/mcli_pytest.py \
           --image '${{ inputs.container }}' \
           --git_repo '${{ inputs.git_repo }}' \
           --pip_deps '${{ inputs.pip_deps }}' \
@@ -133,7 +137,7 @@ runs:
         MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
       run: |
         set -ex
-        ~/.local/bin/python .github/mcli/follow_mcli_logs.py \
+        python .github/mcli/follow_mcli_logs.py \
           --name '${{ steps.tests.outputs.RUN_NAME }}'
     - name: Stop Run if Cancelled
       if: ${{ cancelled() }}
@@ -142,5 +146,5 @@ runs:
         MOSAICML_API_KEY: ${{ inputs.mcloud_api_key }}
       run: |
         set -ex
-        ~/.local/bin/python .github/mcli/cancel_mcli_run.py \
+        python .github/mcli/cancel_mcli_run.py \
           --name '${{ steps.tests.outputs.RUN_NAME }}'
