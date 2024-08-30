@@ -62,13 +62,18 @@ runs:
   steps:
   - name: Checkout
     uses: actions/checkout@v3
+  - name: Activate virtualenv
+    shell: bash
+    run: |
+      python -m venv .venv
+      . .venv/bin/activate
+      echo PATH=$PATH >> $GITHUB_ENV
   - name: Setup
     shell: bash
     run: |
       set -ex
-      export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
-      python -m venv .venv
       . .venv/bin/activate
+      export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
       echo PATH=$PATH >> $GITHUB_ENV
       pip install uv
       uv pip install --upgrade pip wheel
@@ -78,6 +83,7 @@ runs:
     shell: bash
     run: |
       set -ex
+      . .venv/bin/activate
       export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
       export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
       export WANDB_PROJECT='${{ inputs.pytest_wandb_project }}'
@@ -91,9 +97,6 @@ runs:
       export AZURE_ACCOUNT_NAME='${{ inputs.azure_account_name }}'
       export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
-
-      # Activate venv
-      . .venv/bin/activate
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
