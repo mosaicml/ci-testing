@@ -100,13 +100,8 @@ runs:
       export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
 
-      ls
-
-      uv pip list
-
+      # Activate venv
       . .venv/bin/activate
-
-      uv pip list
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
