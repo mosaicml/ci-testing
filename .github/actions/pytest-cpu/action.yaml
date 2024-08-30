@@ -76,7 +76,6 @@ runs:
     run: |
       set -ex
       which python
-      export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
       which python
       pip install uv
@@ -87,8 +86,6 @@ runs:
     shell: bash
     run: |
       set -ex
-      which python
-      export PATH=/composer-python:$PATH
       which python
       export WANDB_API_KEY='${{ inputs.wandb_api_key }}'
       export WANDB_ENTITY='${{ inputs.pytest_wandb_entity }}'
