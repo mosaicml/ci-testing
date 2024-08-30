@@ -75,8 +75,6 @@ runs:
     shell: bash
     run: |
       set -ex
-      # Activate venv
-      . .venv/bin/activate
       which python
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
