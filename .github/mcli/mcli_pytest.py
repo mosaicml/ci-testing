@@ -64,8 +64,8 @@ if __name__ == '__main__':
 
     export COMPOSER_PACKAGE_NAME='{args.pip_package_name}'
 
-    python -m venv --system-site-packages .venv
-    . .venv/bin/activate
+    which python
+    which pip
 
     pip install uv
     uv pip install --upgrade --no-build-isolation .{args.pip_deps}
