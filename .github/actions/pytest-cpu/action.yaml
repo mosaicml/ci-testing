@@ -74,7 +74,6 @@ runs:
       set -ex
       . .venv/bin/activate
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
-      echo PATH=$PATH >> $GITHUB_ENV
       pip install uv
       uv pip install --upgrade pip wheel
       uv pip install --upgrade .${{ inputs.pip_deps }}
