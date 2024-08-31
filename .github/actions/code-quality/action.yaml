@@ -17,8 +17,9 @@ runs:
     shell: bash
     run: |
       set -ex
+      pip install uve
       python -m pip install --upgrade pip wheel
-      python -m pip install --upgrade .${{ inputs.pip_deps }}
+      python -m pip install --system .${{ inputs.pip_deps }}
   - name: Run checks
     shell: bash
     run: |
