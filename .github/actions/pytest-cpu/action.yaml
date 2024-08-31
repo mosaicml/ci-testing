@@ -94,12 +94,6 @@ runs:
       export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
 
-      which python
-      which pip
-      which pytest
-      which composer
-      python -c "import transformers; print(transformers.__file__)"
-
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
       make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
