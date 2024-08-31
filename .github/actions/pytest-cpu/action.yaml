@@ -102,6 +102,7 @@ runs:
       which pip
       which pytest
       which composer
+      python -c "import transformers; print(transformers.__file__)"
 
       python -m coverage combine
   - uses: actions/upload-artifact@v3
