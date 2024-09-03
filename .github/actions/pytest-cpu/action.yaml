@@ -100,6 +100,7 @@ runs:
       # make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
       python -m coverage combine
+      ls -al
   - uses: actions/upload-artifact@v3
     with:
       name: coverage-${{ github.sha }}-${{ inputs.name }}
