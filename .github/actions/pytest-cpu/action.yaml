@@ -3,9 +3,6 @@ inputs:
   composer_package_name:
     required: false
     type: string
-  container:
-    required: true
-    type: string
   name:
     required: true
     type: string
