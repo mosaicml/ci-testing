@@ -101,6 +101,7 @@ runs:
 
       python -m coverage combine
       ls -al
+      pwd
   - uses: actions/upload-artifact@v3
     with:
       name: coverage-${{ github.sha }}-${{ inputs.name }}
