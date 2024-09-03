@@ -100,9 +100,8 @@ runs:
       # make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
       python -m coverage combine
-      ls -al
-      pwd
   - uses: actions/upload-artifact@v3
     with:
       name: coverage-${{ github.sha }}-${{ inputs.name }}
-      path: llm-foundry/llm-foundry/.coverage
+      include-hidden-files: true
+      path: .coverage
