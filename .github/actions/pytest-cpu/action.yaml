@@ -71,8 +71,9 @@ runs:
       set -ex
       export PATH=/composer-python:$PATH
       export COMPOSER_PACKAGE_NAME='${{ inputs.composer_package_name }}'
-      python -m pip install --upgrade pip wheel
-      python -m pip install --upgrade .${{ inputs.pip_deps }}
+      pip install uv
+      uv pip install --system --upgrade pip wheel
+      uv pip install --system .${{ inputs.pip_deps }}
   - name: Run Tests
     id: tests
     shell: bash
@@ -102,4 +103,5 @@ runs:
   - uses: actions/upload-artifact@v3
     with:
       name: coverage-${{ github.sha }}-${{ inputs.name }}
+      include-hidden-files: true
       path: .coverage
