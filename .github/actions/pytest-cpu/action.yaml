@@ -96,8 +96,8 @@ runs:
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
-      make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks tests/optim/test_scheduler.py"
-      # make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
+      make test PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS --codeblocks"
+      make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
       python -m coverage combine
   - uses: actions/upload-artifact@v3
