@@ -32,6 +32,10 @@ inputs:
     required: false
     type: string
     default: r1z4
+  gpu_type:
+    required: false
+    type: string
+    default: a100_40gb
   python_version:
     required: false
     type: string
@@ -121,6 +125,7 @@ runs:
 
         python .github/mcli/mcli_pytest.py \
           --cluster '${{ inputs.cluster }}' \
+          --gpu_type '${{ inputs.gpu_type }}' \
           --image '${{ inputs.container }}' \
           --git_repo '${{ inputs.git_repo }}' \
           --pip_deps '${{ inputs.pip_deps }}' \
