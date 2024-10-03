@@ -28,6 +28,10 @@ inputs:
   mcloud_api_key:
     required: true
     description: "MosaicML API key - Pass in as repo secret"
+  cluster:
+    required: false
+    type: string
+    default: r1z4
   python_version:
     required: false
     type: string
@@ -116,6 +120,7 @@ runs:
         fi
 
         python .github/mcli/mcli_pytest.py \
+          --cluster '${{ inputs.cluster }}' \
           --image '${{ inputs.container }}' \
           --git_repo '${{ inputs.git_repo }}' \
           --pip_deps '${{ inputs.pip_deps }}' \
