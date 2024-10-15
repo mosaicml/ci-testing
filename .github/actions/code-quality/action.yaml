@@ -7,9 +7,6 @@ inputs:
   pip_deps:
     required: true
     type: string
-  safe_directory:
-    required: true
-    type: string
 runs:
   using: composite
   steps:
@@ -26,5 +23,4 @@ runs:
   - name: Run checks
     shell: bash
     run: |
-      git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
       pre-commit run --all-files
