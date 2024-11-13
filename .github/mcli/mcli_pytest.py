@@ -12,7 +12,7 @@ from mcli import RunConfig, create_run
 def retry_create_run(config):
     sleep_time = 1
     retries = 3
-    timeout = 10
+    timeout = 30
     while retries > 0:
         try:
             create_run(config, timeout=timeout)
