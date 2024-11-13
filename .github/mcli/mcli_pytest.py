@@ -5,8 +5,22 @@
 
 import argparse
 import os
+import time 
 
 from mcli import RunConfig, create_run
+
+def retry_create_run(config):
+    sleep_time = 1
+    retries = 3
+    while retries > 0:
+        try:
+            create_run(config)
+        except Exception as e:
+            time.sleep(sleep_time)
+            sleep_time *= 2
+            retries -= 1
+            
+    
 
 if __name__ == '__main__':
 
@@ -110,7 +124,8 @@ if __name__ == '__main__':
     )
 
     # Create run
-    run = create_run(config)
+    retry_create_run(config)
+
     print(f'[GHA] Run created: {run.name}')
 
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
