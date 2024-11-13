@@ -16,6 +16,7 @@ def retry_create_run(config):
         try:
             create_run(config)
         except Exception as e:
+            print(f"Create run failed, retrying {sleep_time} more time(s).")
             time.sleep(sleep_time)
             sleep_time *= 2
             retries -= 1
