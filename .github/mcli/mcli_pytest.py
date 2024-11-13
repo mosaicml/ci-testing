@@ -12,9 +12,10 @@ from mcli import RunConfig, create_run
 def retry_create_run(config):
     sleep_time = 1
     retries = 3
+    timeout = 10
     while retries > 0:
         try:
-            create_run(config)
+            create_run(config, timeout=timeout)
         except Exception as e:
             print(f"Create run failed, retrying {sleep_time} more time(s).")
             time.sleep(sleep_time)
