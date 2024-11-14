@@ -9,20 +9,6 @@ import time
 
 from mcli import RunConfig, create_run
 
-def retry_create_run(config):
-    sleep_time = 1
-    retries = 3
-    timeout = 30
-    while retries > 0:
-        try:
-            create_run(config, timeout=timeout)
-        except Exception as e:
-            print(f"Create run failed, retrying {sleep_time} more time(s).")
-            time.sleep(sleep_time)
-            sleep_time *= 2
-            retries -= 1
-            
-    
 
 if __name__ == '__main__':
 
@@ -126,7 +112,7 @@ if __name__ == '__main__':
     )
 
     # Create run
-    retry_create_run(config)
+    create_run(config, timeout=30)
 
     print(f'[GHA] Run created: {run.name}')
 
