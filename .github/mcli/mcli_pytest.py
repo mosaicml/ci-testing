@@ -5,10 +5,8 @@
 
 import argparse
 import os
-import time 
 
 from mcli import RunConfig, create_run
-
 
 if __name__ == '__main__':
 
@@ -113,7 +111,6 @@ if __name__ == '__main__':
 
     # Create run
     create_run(config, timeout=30)
-
     print(f'[GHA] Run created: {run.name}')
 
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
