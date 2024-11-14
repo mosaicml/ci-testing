@@ -110,7 +110,7 @@ if __name__ == '__main__':
     )
 
     # Create run
-    create_run(config, timeout=30)
+    run = create_run(config, timeout=30)
     print(f'[GHA] Run created: {run.name}')
 
     with open(os.environ['GITHUB_OUTPUT'], 'a') as fh:
