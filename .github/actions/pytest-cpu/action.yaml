@@ -97,7 +97,7 @@ runs:
       make test-dist PYTEST='${{ inputs.pytest_command }}' EXTRA_ARGS="$COMMON_ARGS" WORLD_SIZE=2
 
       python -m coverage combine
-  - uses: actions/upload-artifact@v3
+  - uses: actions/upload-artifact@v4
     with:
       name: coverage-${{ github.sha }}-${{ inputs.name }}
       include-hidden-files: true
