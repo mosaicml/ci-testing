@@ -93,7 +93,7 @@ runs:
       shell: bash
       run: |
         set -ex
-        pip install uv
+        pip install uv==0.6.5
         uv pip install --system mosaicml-cli
         mcli version
     - name: Submit Run

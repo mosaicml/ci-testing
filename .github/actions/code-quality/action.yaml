@@ -17,7 +17,7 @@ runs:
     shell: bash
     run: |
       set -ex
-      pip install uv
+      pip install uv==0.6.5
       uv pip install --upgrade --system pip wheel
       uv pip install --system .${{ inputs.pip_deps }}
   - name: Run checks

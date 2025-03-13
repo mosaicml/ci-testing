@@ -64,7 +64,7 @@ if __name__ == '__main__':
 
     export COMPOSER_PACKAGE_NAME='{args.pip_package_name}'
 
-    pip install uv
+    pip install uv==0.6.5
 
     uv pip install --system --no-build-isolation .{args.pip_deps}
 
