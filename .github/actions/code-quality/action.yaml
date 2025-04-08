@@ -18,7 +18,7 @@ runs:
     run: |
       set -ex
       pip install uv
-      uv pip install --upgrade --system pip wheel
+      uv pip install --upgrade --system pip wheel setuptools
       uv pip install --system .${{ inputs.pip_deps }}
   - name: Run checks
     shell: bash
