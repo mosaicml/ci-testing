@@ -14,7 +14,7 @@ runs:
     run: |
       set -ex
       pip install uv
-      uv pip install --upgrade --system pip wheel
+      uv pip install --upgrade --system pip wheel setuptools
       uv pip install --system coverage[toml]==6.5.0
   - name: Download artifacts
     uses: actions/download-artifact@v4
