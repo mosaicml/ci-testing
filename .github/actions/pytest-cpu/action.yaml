@@ -57,6 +57,12 @@ inputs:
   azure_account_access_key:
     required: false
     description: "Azure account access key - Pass in as repo secret"
+  databricks_host:
+    required: false
+    description: "Databricks host - Pass in as repo secret"
+  databricks_token:
+    required: false
+    description: "Databricks token - Pass in as repo secret"
 runs:
   using: composite
   steps:
@@ -90,6 +96,8 @@ runs:
       export AZURE_ACCOUNT_NAME='${{ inputs.azure_account_name }}'
       export AZURE_ACCOUNT_ACCESS_KEY='${{ inputs.azure_account_access_key }}'
       export COMMON_ARGS="-v --durations=20 -m '${{ inputs.pytest_markers }}' -o tmp_path_retention_policy=failed"
+      export DATABRICKS_HOST='${{ inputs.databricks_host }}'
+      export DATABRICKS_TOKEN='${{ inputs.databricks_token }}'
 
       # Necessary to run git diff for doctests
       git config --global --add safe.directory /__w/${{ inputs.safe_directory }}/${{ inputs.safe_directory }}
