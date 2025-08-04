@@ -97,16 +97,10 @@ if __name__ == '__main__':
         integrations=[git_integration],
         command=command,
         scheduling={'max_duration': args.timeout / 60 / 60},
-        env_variables=[
-            {
-                'key': 'MOSAICML_PLATFORM',
-                'value': 'False',
-            },
-            {
-                'key': 'PYTHONUNBUFFERED',
-                'value': '1',
-            },
-        ],
+        env_variables={
+            'MOSAICML_PLATFORM': 'False',
+            'PYTHONUNBUFFERED': '1',
+        },
     )
 
     # Create run
