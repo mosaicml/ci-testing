@@ -31,11 +31,11 @@ inputs:
   cluster:
     required: false
     type: string
-    default: r1z4
+    default: r14z3p2
   gpu_type:
     required: false
     type: string
-    default: a100_40gb
+    default: h100_80gb
   python_version:
     required: false
     type: string
